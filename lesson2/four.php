@@ -64,34 +64,54 @@ function getLineInPosition($position)
     while ($start <= $end) {
         $center = round(($end + $start) / 2);
         $centerLine = getDigital($center);
+
         if (getDigital($center - 1) < $position && $centerLine >= $position) {
             return $center;
         } else {
-            $centerLine > $position ? $end = $center : $start = $center + 1;
+            $centerLine > $position ? $end = $center - 1 : $start = $center + 1;
         }
     }
+    return null;
 }
 
-function searchNumberInLine($position) {
-   $k = 9;
-   $capacity = 1;
-   $count = 0;
-   $beforeCount = 0;
+/**
+ * ищет нужный символ
+ * @param $position int - общая позиция
+ * @param $line int - номер линии в которой искомый символ
+ * @return int|null - искомый символ.
+ */
+function searchNumberInLine(int $position, int $line) {
 
-   while($position > $count) {
-       $beforeCount = $count;
-       $count += $k * $capacity;
-       $k *= 10;
-       $capacity++;
-   }
+    if($position < 10) return $position; // если позиция в строке от 1 до 9, то просто вернем.
 
-   var_dump($k, $capacity, $count, $beforeCount);
+    $offset = $position - getDigital($line - 1); // вычисляем какой символ от начала строки ищем.
 
-   echo ($k - $beforeCount) / $capacity;
+    $start = 0; // начальное число
+    $end = $line; // конечное число
+
+    // цикл, ищем нужное число, чтобы получить его цифру
+    while ($start <= $end) {
+        // вычисляем середину
+        $center = (int) floor(($end + $start) / 2);
+        // вычисляем сколько символов в числе
+        $countDig = getCountDigInLine($center);
+
+        // если искомый символ больше чем кол-во символов в предидущем числе и меньше либо равно чем в текущем - вернуть указанное число.
+        if (getCountDigInLine($center - 1) < $offset && $countDig >= $offset) {
+            // вычисляем смещение в данном числе
+            $offset -= getCountDigInLine($center - 1);
+            // возвращаем искомый символ!
+            return str_split((string) $center)[$offset - 1];
+        } else {
+            // если нет, смотрим, больше или нет мы получаем количество символов относительно искомого
+            $countDig > $offset ? $end = $center - 1 : $start = $center + 1;
+        }
+    }
+    return null;
 }
 
+$start = microtime(true);
 $num = 999999999999999999;
 $line = getLineInPosition($num);
-$position =  getCountDigInLine($line) - ($num - getDigital($line - 1));
-searchNumberInLine($position);
-
+echo searchNumberInLine($num, $line) . '<br>';
+echo microtime(true) - $start;
