@@ -138,20 +138,18 @@ class BinaryTree
                 $node = &$node->parent->parent;
             } else {
                 if ($node->parent === $node->parent->parent->left) {
-                    // как оказалось - условие никогда не выполняется)
-                    /*if ($node === $node->parent->right) {
+                    if ($node === $node->parent->right) {
                         $node = &$node->parent;
                         $this->smallLeftRotate($node);
-                    }*/
+                    }
                     $node->parent->isRed = false;
                     $node->parent->parent->isRed = true;
                     $this->rightRotate($node->parent->parent);
                 } else {
-                    // как оказалось - условие никогда не выполняется)
-                    /*if ($node === $node->parent->left) {
+                    if ($node === $node->parent->left) {
                         $node = &$node->parent;
                         $this->smallRightRotate($node);
-                    }*/
+                    }
                     $node->parent->isRed = false;
                     $node->parent->parent->isRed = true;
                     $this->leftRotate($node->parent->parent);
@@ -204,8 +202,7 @@ class BinaryTree
         $node->parent = &$left;
     }
 
-    // нижние повороты не работаеют) рудимент)
-    /*private function smallLeftRotate(&$node)
+    private function smallLeftRotate(&$node)
     {
         $right = &$node->right;
         $right->parent = &$node->parent;
@@ -221,7 +218,7 @@ class BinaryTree
         $node->left = &$node->left->right;
         $left->right = &$node;
         $node->parent->right = &$left;
-    }*/
+    }
 
     private function addRed(&$node)
     {
