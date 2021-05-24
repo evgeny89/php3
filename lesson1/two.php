@@ -7,6 +7,10 @@ $num = (int)str_replace('n=', '', urldecode(file_get_contents('php://input')));
 
 function getMaxSimpleNum($num)
 {
+    while ($num % 2 === 0) {
+        $num /= 2;
+    }
+
     $start = 3;
     $res = 1;
     while ($num > 1) {
